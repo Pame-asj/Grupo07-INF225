@@ -6,7 +6,7 @@ Integrantes - Rol:
 * Pablo Acuña - 202273623-2
 * Gustavo Romero - 202130511-4
 
-* **Tutor:** 
+* **Tutor: Felipe Ignacio Fernández Aguilar ** 
 
 ## Wiki
 
