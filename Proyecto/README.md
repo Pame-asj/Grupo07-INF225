@@ -24,4 +24,4 @@ Podrá acceder al prototipo a través de navegador web, ingresando a la siguient
 ```
 http://127.0.0.1:8000
 ```
-*Aclarar que en un inicio tanemos un sistema de login manual que posteriormente sera cambiado, ahora solo esta así para hacer probar el funcionamiento inicial*
+*Aclarar que en un inicio tanemos un sistema de login manual que posteriormente sera cambiado, ahora solo esta así para hacer probar el prototipo inicial*
