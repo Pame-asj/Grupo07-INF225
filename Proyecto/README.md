@@ -11,6 +11,7 @@ Luego, para iniciar el servidor, debe ubicarse en el directorio del proyecto (do
 ```bash
 virtualenv -p python3 venv
 source venv/bin/activate
+pip install django #En este caso es necesario volver a instalar django
 ```
 Y si no, basta con la siguiente linea:
 
