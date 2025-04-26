@@ -6,7 +6,13 @@ pip install django
 
 La instalación puede llevarse a cabo dentro de un **entorno virtual** o directamente en el **sistema**, según se estime.
 
-Luego, para iniciar el servidor, debe ubicarse en el directorio del proyecto (donde se encuentra el archivo `manage.py`) y ejecutar:
+Luego, para iniciar el servidor, debe ubicarse en el directorio del proyecto (donde se encuentra el archivo `manage.py`) y si se trabaja en un entorno virtual linux ejecutar primero:
+
+```bash
+virtualenv -p python3 venv
+source venv/bin/activate
+```
+Y si no, basta con la siguiente linea:
 
 ```bash
 python manage.py runserver
@@ -17,3 +23,4 @@ Podrá acceder al prototipo a través de navegador web, ingresando a la siguient
 ```
 http://127.0.0.1:8000
 ```
+*Aclarar que en un inicio tanemos un sistema de login manual que posteriormente sera cambiado, ahora solo esta así para hacer probar el funcionamiento inicial*
