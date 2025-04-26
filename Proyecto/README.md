@@ -1,1 +1,19 @@
-Para poder visualizar el "servidor" se debe tener instalado django (pip install django), esto puede ser en un virtual enviroment o no. Luego basta con el comando 'python manage.py runserver' (estando dentro del directorio del proyecto, en donde se encuentra manage.py), y accediendo al puerto local (http://127.0.0.1:8000) en cualquier navegador se podrá ver el prototipo.
+Para visualizar el servidor, es necesario tener **Django** instalado. Esto se puede hacer mediante el siguiente comando:
+
+```bash
+pip install django
+```
+
+La instalación puede llevarse a cabo dentro de un **entorno virtual** o directamente en el **sistema**, según se estime.
+
+Luego, para iniciar el servidor, debe ubicarse en el directorio del proyecto (donde se encuentra el archivo `manage.py`) y ejecutar:
+
+```bash
+python manage.py runserver
+```
+
+Podrá acceder al prototipo a través de navegador web, ingresando a la siguiente dirección:
+
+```
+http://127.0.0.1:8000
+```
