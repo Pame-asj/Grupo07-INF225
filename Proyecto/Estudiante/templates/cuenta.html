@@ -1,0 +1,38 @@
+{% extends 'base_estudiante.html' %}
+
+{% load static %}
+
+{% block navegacion %}
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'estudiante_index' %}">Inicio</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'ensayos' %}">Ensayos</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'aboutus' %}">Sobre nosotros</a>
+</li>
+{% endblock %}
+
+
+{% block cuenta-atras %}
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'cuenta' %}">Cuenta</a>
+    </li>
+    <li class="nav-item">
+        <a href="{% url 'login' %}" class="nav-link">Cerrar sesión</a>
+    </li>
+{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-8">
+        <h1 class="mb-5"> Cuenta</h1>
+        <p>¡Pronto!</p>
+    </div>
+    <div class="col-md-4 d-flex justify-content-center align-items-center">
+        <img src="https://admision.uautonoma.cl/content/uploads/2023/07/universidad-autonoma-blog-que-se-puede-llevar-paes-800x366.jpeg" alt="FotoHome" width="300" height="210">
+    </div>
+</div>
+{% endblock %}
