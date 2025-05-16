@@ -1,6 +1,7 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-class User(models.Model):
+class User(AbstractUser):  # Heredar de AbstractUser
     ROLES = [
         ('Estudiante', 'Estudiante'),
         ('AutoridadDocente', 'AutoridadDocente'),
@@ -13,14 +14,24 @@ class User(models.Model):
         ('cuarto', '4° Medio'),
     ]
 
-    full_name = models.CharField(max_length=200)
-    email = models.EmailField(unique=True)
-    phone = models.CharField(max_length=15)
-    date_of_birth = models.DateField()
-    username = models.CharField(max_length=150, unique=True)
-    password = models.CharField(max_length=255)  # Cifrado recomendado
+    first_name = None
+    last_name = None
+    full_name = models.CharField(max_length=100, null=True, blank=True)
+    phone = models.CharField(max_length=15, blank=True)
+    date_of_birth = models.DateField(null=True, blank=True)
     role = models.CharField(max_length=50, choices=ROLES, default='Estudiante')
-    nivel = models.CharField(max_length=50, choices=NIVELES, null=True, blank=True)  # Nuevo campo
+    nivel = models.CharField(max_length=50, choices=NIVELES, null=True, blank=True)
+    colegio = models.CharField(max_length=100, blank=True, default='Colegio SIP')  # Campo nuevo
 
     def __str__(self):
         return f"{self.username} - {self.role} - {self.nivel}"
+
+class Ensayo(models.Model):
+    titulo = models.CharField(max_length=200)
+    asignatura = models.CharField(max_length=50)
+    nivel = models.CharField(max_length=50, choices=User.NIVELES)
+    colegio = models.CharField(max_length=100)
+    contenido = models.TextField(blank=True)
+
+    def __str__(self):
+        return f"{self.titulo} - {self.asignatura}"

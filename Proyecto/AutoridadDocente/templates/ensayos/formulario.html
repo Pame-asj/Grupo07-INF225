@@ -1,0 +1,23 @@
+{% extends 'base_docente.html' %}
+
+{% block navegacion %}
+<li class="nav-item"><a class="nav-link" href="{% url 'docente_index' %}">Inicio</a></li>
+<li class="nav-item"><a class="nav-link active" href="{% url 'listar_ensayos' %}">Gestionar Ensayos</a></li>
+<li class="nav-item"><a class="nav-link" href="{% url 'listar_preguntas' %}">Banco de Preguntas</a></li>
+{% endblock %}
+
+{% block cuenta-atras %}
+<li class="nav-item"><a class="nav-link" href="{% url 'cuenta_docente' %}">Cuenta</a></li>
+<li class="nav-item"><a href="{% url 'logout' %}" class="nav-link">Cerrar sesión</a></li>
+{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">{{ form.instance.pk|yesno:"Editar ensayo,Nuevo ensayo" }}</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success">Guardar</button>
+    <a href="{% url 'listar_ensayos' %}" class="btn btn-secondary">Cancelar</a>
+</form>
+{% endblock %}

@@ -1,38 +1,40 @@
 {% extends 'base_estudiante.html' %}
 
-{% load static %}
-
 {% block navegacion %}
-<li class="nav-item">
-    <a class="nav-link" href="{% url 'estudiante_index' %}">Inicio</a>
-</li>
-<li class="nav-item">
-    <a class="nav-link" href="{% url 'ensayos' %}">Ensayos</a>
-</li>
-<li class="nav-item">
-    <a class="nav-link" href="{% url 'aboutus' %}">Sobre nosotros</a>
-</li>
+<li class="nav-item"><a class="nav-link" href="{% url 'estudiante_index' %}">Inicio</a></li>
+<li class="nav-item"><a class="nav-link active" href="{% url 'ensayos' %}">Ensayos Disponibles</a></li>
 {% endblock %}
 
-
 {% block cuenta-atras %}
-    <li class="nav-item">
-        <a class="nav-link" href="{% url 'cuenta' %}">Cuenta</a>
-    </li>
-    <li class="nav-item">
-        <a href="{% url 'login' %}" class="nav-link">Cerrar sesión</a>
-    </li>
+<li class="nav-item"><a class="nav-link" href="{% url 'cuenta' %}">Cuenta</a></li>
+<li class="nav-item"><a href="{% url 'logout' %}" class="nav-link">Cerrar sesión</a></li>
 {% endblock %}
 
 {% block content %}
+<h2 class="mb-4">Ensayos Disponibles</h2>
 
-<div class="row">
-    <div class="col-md-8">
-        <h1 class="mb-5"> Ensayos</h1>
-        <p>¡Pronto!</p>
-    </div>
-    <div class="col-md-4 d-flex justify-content-center align-items-center">
-        <img src="https://admision.uautonoma.cl/content/uploads/2023/07/universidad-autonoma-blog-que-se-puede-llevar-paes-800x366.jpeg" alt="FotoHome" width="300" height="210">
-    </div>
-</div>
+{% if ensayos %}
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Título</th>
+            <th>Asignatura</th>
+            <th>Nivel</th>
+            <th>Colegio</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for ensayo in ensayos %}
+        <tr>
+            <td>{{ ensayo.titulo }}</td>
+            <td>{{ ensayo.asignatura }}</td>
+            <td>{{ ensayo.get_nivel_display }}</td>
+            <td>{{ ensayo.colegio }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>No hay ensayos disponibles para tu nivel y colegio aún. ¡Consulta con tu docente!</p>
+{% endif %}
 {% endblock %}

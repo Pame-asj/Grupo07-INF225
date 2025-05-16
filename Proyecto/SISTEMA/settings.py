@@ -117,3 +117,12 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+AUTH_USER_MODEL = 'LoginRegister.User'  
+LOGIN_URL = '/login/' 
+# SISTEMA/settings.py
+LOGIN_REDIRECT_URL = '/estudiante/ensayos/'  # ¡Cambia esto!
+
+SESSION_COOKIE_SECURE = False  # True en producción con HTTPS
+SESSION_COOKIE_SAMESITE = 'Lax'
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True

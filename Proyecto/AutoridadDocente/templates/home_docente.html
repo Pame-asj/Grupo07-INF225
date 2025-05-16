@@ -17,7 +17,7 @@
         <a class="nav-link" href="{% url 'cuenta_docente' %}">Cuenta</a>
     </li>
     <li class="nav-item">
-        <a href="{% url 'login' %}" class="nav-link">Cerrar sesión</a>
+        <a href="{% url 'logout' %}" class="nav-link">Cerrar sesión</a>
     </li>
 {% endblock %}
 
@@ -25,18 +25,23 @@
 
 <div class="row">
     <div class="col-md-8">
-        <h1 class="mb-5"> ¡Bienvenido!</h1>
-        <p>¡Nos alegra tenerte aquí!</p>
-        <p>Esta plataforma ha sido diseñada para que puedas practicar de manera personalizada, a tu ritmo y según los contenidos que estás viendo en tu curso.</p>
-            
-        <p>Accede a ensayos asignados por tu colegio, pon a prueba tus conocimientos y recibe retroalimentación que te ayudará a prepararte de forma efectiva para la PAES.
-            Cada ensayo está pensado para que ganes confianza, mejores tu rendimiento y llegues más preparado al momento de la prueba real.</p>
-            
-        <p>Explora, responde y aprende.
-            Tu progreso empieza aquí.</p>
+        <h1 class="mb-5">¡Bienvenido/a, Autoridad Docente!</h1>
+        <p>Esta sección está diseñada especialmente para que puedas administrar y supervisar el proceso de preparación PAES de tus estudiantes.</p>
+
+        <p>Desde aquí podrás:</p>
+        <ul>
+            <li>📋 Crear y editar ensayos personalizados según el nivel y contenidos curriculares.</li>
+            <li>📊 Revisar el banco de preguntas y actualizar los enunciados disponibles.</li>
+            <li>🎯 Asignar ensayos por curso o grupo, y hacer seguimiento del progreso.</li>
+        </ul>
+
+        <p>Tu rol es clave para orientar y apoyar a los estudiantes en su camino hacia la educación superior. Esta plataforma pone a tu disposición las herramientas necesarias para lograrlo.</p>
+        
+        <p><strong>Gestiona. Evalúa. Acompaña.</strong></p>
     </div>
     <div class="col-md-4 d-flex justify-content-center align-items-center">
-        <img src="https://admision.uautonoma.cl/content/uploads/2023/07/universidad-autonoma-blog-que-se-puede-llevar-paes-800x366.jpeg" alt="FotoHome" width="300" height="210">
+        <img src="https://admision.uautonoma.cl/content/uploads/2023/07/universidad-autonoma-blog-que-se-puede-llevar-paes-800x366.jpeg" alt="Docente PAES" width="300" height="210">
     </div>
 </div>
+
 {% endblock %}

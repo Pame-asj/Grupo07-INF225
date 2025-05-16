@@ -15,8 +15,8 @@ Register
         <form method="post">
           {% csrf_token %}
           <div class="mb-2">
-            <label for="name" class="form-label">Nombre completo</label>
-            <input type="text" class="form-control form-control-sm" id="name" name="name" required>
+            <label for="full_name" class="form-label">Nombre completo</label>
+            <input type="text" class="form-control form-control-sm" id="full_name" name="full_name" required>
           </div>
           <div class="mb-2">
             <label for="email" class="form-label">Correo electrónico</label>
@@ -44,8 +44,7 @@ Register
               <option value="Estudiante">Estudiante</option>
               <option value="AutoridadDocente">Docente</option>
           </select>
-      </div>
-      
+      </div>     
       <div class="mb-3">
           <label for="nivel" class="form-label">Nivel</label>
           <select class="form-control" id="nivel" name="nivel" required>

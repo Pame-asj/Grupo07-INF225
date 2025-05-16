@@ -1,0 +1,11 @@
+{% extends 'base_docente.html' %}
+{% block content %}
+<h2>{{ ensayo|default:"Crear nuevo ensayo" }}</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success">Guardar</button>
+    <a href="{% url 'ensayos_docente' %}" class="btn btn-secondary">Cancelar</a>
+</form>
+{% endblock %}
