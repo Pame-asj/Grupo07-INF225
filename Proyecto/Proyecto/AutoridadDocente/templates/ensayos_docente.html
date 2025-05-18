@@ -1,0 +1,44 @@
+{% extends 'base_docente.html' %}
+{% load static %}
+
+{% block navegacion %}
+<li class="nav-item"><a class="nav-link" href="{% url 'docente_index' %}">Inicio</a></li>
+<li class="nav-item"><a class="nav-link" href="{% url 'ensayos_docente' %}">Gestionar Ensayos</a></li>
+{% endblock %}
+
+{% block cuenta-atras %}
+<li class="nav-item"><a class="nav-link" href="{% url 'cuenta_docente' %}">Cuenta</a></li>
+<li class="nav-item"><a href="{% url 'logout' %}" class="nav-link">Cerrar sesión</a></li>
+{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Gestión de Ensayos</h2>
+<a class="btn btn-primary mb-3" href="{% url 'crear_ensayo' %}">Crear nuevo ensayo</a>
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Título</th>
+      <!--<th>Asignatura</th> -->
+      <th>Nivel</th>
+      <th>Colegio</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for ensayo in ensayos %}
+    <tr>
+      <td>{{ ensayo.titulo }}</td>
+      <!-- <td>{{ ensayo.asignatura }}</td> !-->
+      <td>{{ ensayo.get_nivel_display }}</td>
+      <td>{{ ensayo.colegio }}</td>
+      <td>
+        <a href="{% url 'editar_ensayo' ensayo.id %}" class="btn btn-sm btn-warning">Editar</a>
+      </td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="5">No hay ensayos aún.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
