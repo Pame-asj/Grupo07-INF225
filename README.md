@@ -15,3 +15,5 @@ Se puede acceder a la Wiki mediante el siguiente [enlace](https://gitlab.com/gus
 ## Videos
 
 Se puede acceder al video con la presentación del cliente mediante el siguiente [enlace](https://aula.usm.cl/mod/resource/view.php?id=6322574)
+
+Se puede acceder al video con la presentación de un protipo mediante el siguiente [enlace](https://www.youtube.com/watch?v=hKjB6P-AVgo)
