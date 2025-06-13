@@ -27,3 +27,20 @@ class Ensayo(models.Model):
 
     def __str__(self):
         return self.titulo
+
+class RespuestaEnsayo(models.Model):
+    estudiante = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'role': 'Estudiante'})
+    ensayo = models.ForeignKey(Ensayo, on_delete=models.CASCADE)
+    fecha_respuesta = models.DateTimeField(auto_now_add=True)
+    puntaje = models.FloatField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.estudiante.username} - {self.ensayo.titulo}"
+    
+class RespuestaPregunta(models.Model):
+    respuesta_ensayo = models.ForeignKey(RespuestaEnsayo, on_delete=models.CASCADE, related_name='respuestas')
+    pregunta = models.ForeignKey(Pregunta, on_delete=models.CASCADE)
+    alternativa_elegida = models.CharField(max_length=1)
+
+    def es_correcta(self):
+        return self.alternativa_elegida == self.pregunta.respuesta_correcta

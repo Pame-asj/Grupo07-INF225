@@ -1,0 +1,6 @@
+{% extends 'base_estudiante.html' %}
+{% block content %}
+<h2>Resultado del ensayo</h2>
+<p>Puntaje obtenido: {{ resultado.puntaje }}%</p>
+<a href="{% url 'ensayos' %}" class="btn btn-primary">Volver a mis ensayos</a>
+{% endblock %}

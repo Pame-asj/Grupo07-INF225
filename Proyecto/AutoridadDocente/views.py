@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from LoginRegister.models import Ensayo
 from .models import Ensayo, Pregunta
 from .forms import EnsayoForm, PreguntaForm
+from AutoridadDocente.models import RespuestaEnsayo
+from django.contrib.auth.decorators import login_required
 def index(request):
     return render(request, 'base_docente.html')
 
@@ -76,3 +78,11 @@ def eliminar_pregunta(request, pregunta_id):
     pregunta = get_object_or_404(Pregunta, id=pregunta_id)
     pregunta.delete()
     return redirect('listar_preguntas')
+
+@login_required
+def resultados_ensayos_docente(request):
+    if request.user.role != 'AutoridadDocente':
+        return redirect('login')
+
+    resultados = RespuestaEnsayo.objects.select_related('estudiante', 'ensayo').order_by('-fecha_respuesta')
+    return render(request, 'resultados/resultados_docente.html', {'resultados': resultados})

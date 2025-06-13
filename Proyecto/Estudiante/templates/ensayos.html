@@ -5,11 +5,6 @@
 <li class="nav-item"><a class="nav-link active" href="{% url 'ensayos' %}">Ensayos Disponibles</a></li>
 {% endblock %}
 
-{% block cuenta-atras %}
-<li class="nav-item"><a class="nav-link" href="{% url 'cuenta' %}">Cuenta</a></li>
-<li class="nav-item"><a href="{% url 'logout' %}" class="nav-link">Cerrar sesión</a></li>
-{% endblock %}
-
 {% block content %}
 <h2 class="mb-4">Ensayos Disponibles</h2>
 
@@ -18,23 +13,25 @@
     <thead>
         <tr>
             <th>Título</th>
-            <!-- <th>Asignatura</th>-->
             <th>Nivel</th>
             <th>Colegio</th>
+            <th>Acción</th>
         </tr>
     </thead>
     <tbody>
         {% for ensayo in ensayos %}
         <tr>
             <td>{{ ensayo.titulo }}</td>
-            <!-- <td>{{ ensayo.asignatura }}</td> -->
             <td>{{ ensayo.get_nivel_display }}</td>
             <td>{{ ensayo.colegio }}</td>
+            <td>
+                <a href="{% url 'resolver_ensayo' ensayo.id %}" class="btn btn-primary btn-sm">Resolver</a>
+            </td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
 {% else %}
-<p>No hay ensayos disponibles para tu nivel y colegio aún. ¡Consulta con tu docente!</p>
+<p>No hay ensayos disponibles para tu nivel aún. ¡Consulta con tu docente!</p>
 {% endif %}
 {% endblock %}

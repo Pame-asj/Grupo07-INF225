@@ -13,34 +13,30 @@
 {% endblock %}
 
 {% block content %}
-<h2 class="mb-4">Banco de Preguntas</h2>
-<a href="{% url 'crear_pregunta' %}" class="btn btn-primary mb-3">Agregar nueva pregunta</a>
+<h2 class="mb-4">Resultados de Estudiantes</h2>
 
+{% if resultados %}
 <table class="table table-bordered">
     <thead>
         <tr>
-            <th>Enunciado</th>
-            <th>Temas</th>
-            <th>Acciones</th>
+            <th>Estudiante</th>
+            <th>Ensayo</th>
+            <th>Fecha</th>
+            <th>Puntaje</th>
         </tr>
     </thead>
     <tbody>
-        {% for pregunta in preguntas %}
+        {% for resultado in resultados %}
         <tr>
-            <td>{{ pregunta.enunciado|truncatechars:100 }}</td>
-            <td>
-                {% for tema in pregunta.temas.all %}
-                    <span class="badge bg-secondary">{{ tema.nombre }}</span>
-                {% endfor %}
-            </td>
-            <td>
-                <a href="{% url 'editar_pregunta' pregunta.id %}" class="btn btn-sm btn-warning">Editar</a>
-                <a href="{% url 'eliminar_pregunta' pregunta.id %}" class="btn btn-sm btn-danger">Eliminar</a>
-            </td>
+            <td>{{ resultado.estudiante.full_name }}</td>
+            <td>{{ resultado.ensayo.titulo }}</td>
+            <td>{{ resultado.fecha_respuesta|date:"d M Y H:i" }}</td>
+            <td>{{ resultado.puntaje }}%</td>
         </tr>
-        {% empty %}
-        <tr><td colspan="3">No hay preguntas registradas.</td></tr>
         {% endfor %}
     </tbody>
 </table>
+{% else %}
+<p>No hay respuestas registradas todavía.</p>
+{% endif %}
 {% endblock %}
