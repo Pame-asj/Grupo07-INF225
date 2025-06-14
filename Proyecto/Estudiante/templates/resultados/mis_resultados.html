@@ -11,33 +11,34 @@
     <li class="nav-item"><a class="nav-link" href="{% url 'cuenta_estudiante' %}">Cuenta</a></li>
     <li class="nav-item"><a href="{% url 'logout' %}" class="nav-link">Cerrar sesión</a></li>
 {% endblock %}
-{% block content %}
-<h2 class="mb-4">Ensayos Disponibles</h2>
 
-{% if ensayos %}
+{% block content %}
+<h2 class="mb-4">Mis Resultados</h2>
+
+{% if resultados %}
 <table class="table table-bordered">
     <thead>
         <tr>
-            <th>Título</th>
-            <th>Nivel</th>
-            <th>Colegio</th>
-            <th>Acción</th>
+            <th>Ensayo</th>
+            <th>Fecha</th>
+            <th>Puntaje</th>
+            <th>Porcentaje Correcto</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
-        {% for ensayo in ensayos %}
+        {% for r in resultados %}
         <tr>
-            <td>{{ ensayo.titulo }}</td>
-            <td>{{ ensayo.get_nivel_display }}</td>
-            <td>{{ ensayo.colegio }}</td>
-            <td>
-                <a href="{% url 'resolver_ensayo' ensayo.id %}" class="btn btn-primary btn-sm">Resolver</a>
-            </td>
+            <td>{{ r.ensayo.titulo }}</td>
+            <td>{{ r.fecha_respuesta|date:"d/m/Y H:i" }}</td>
+            <td>{{ r.puntaje|floatformat:1 }}</td>
+            <td>{{ r.porcentaje|floatformat:1 }}%</td>
+            <td><a href="{% url 'detalle_resultado' r.id %}" class="btn btn-sm btn-info">Ver Detalle</a></td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
 {% else %}
-<p>No hay ensayos disponibles para tu nivel aún. ¡Consulta con tu docente!</p>
+<p>No has completado ensayos aún.</p>
 {% endif %}
 {% endblock %}

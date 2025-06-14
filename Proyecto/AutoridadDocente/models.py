@@ -32,7 +32,13 @@ class RespuestaEnsayo(models.Model):
     estudiante = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'role': 'Estudiante'})
     ensayo = models.ForeignKey(Ensayo, on_delete=models.CASCADE)
     fecha_respuesta = models.DateTimeField(auto_now_add=True)
-    puntaje = models.FloatField(null=True, blank=True)
+    puntaje = models.FloatField(null=True, blank=True)  # ya calculado como porcentaje
+
+    def total_preguntas(self):
+        return self.ensayo.preguntas.count()
+
+    def porcentaje(self):
+        return self.puntaje or 0
 
     def __str__(self):
         return f"{self.estudiante.username} - {self.ensayo.titulo}"

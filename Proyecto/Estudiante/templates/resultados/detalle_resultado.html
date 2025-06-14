@@ -1,0 +1,61 @@
+{% extends 'base_estudiante.html' %}
+
+{% block navegacion %}
+<li class="nav-item"><a class="nav-link" href="{% url 'estudiante_index' %}">Inicio</a></li>
+<li class="nav-item"><a class="nav-link" href="{% url 'ensayos' %}">Ensayos</a></li>
+<li class="nav-item"><a class="nav-link"  href="{% url 'mis_resultados' %}">Mis resultados</a></li>
+<li class="nav-item"><a class="nav-link" href="{% url 'aboutus' %}">Sobre nosotros</a></li>
+{% endblock %}
+
+{% block cuenta-atras %}
+    <li class="nav-item"><a class="nav-link" href="{% url 'cuenta_estudiante' %}">Cuenta</a></li>
+    <li class="nav-item"><a href="{% url 'logout' %}" class="nav-link">Cerrar sesión</a></li>
+{% endblock %}
+
+{% block content %}
+<h2>Detalle del Ensayo: {{ resultado.ensayo.titulo }}</h2>
+<p><strong>Fecha:</strong> {{ resultado.fecha_respuesta|date:"d/m/Y H:i" }}</p>
+<p><strong>Puntaje:</strong> {{ resultado.puntaje }}/{{ resultado.total }} ({{ resultado.porcentaje|floatformat:2 }}%)</p>
+
+<table class="table table-striped mt-4">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Pregunta</th>
+            <th>Tu Respuesta</th>
+            <th>Respuesta Correcta</th>
+            <th>Resultado</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for p in detalle %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ p.pregunta }}</td>
+            <td>
+                {% if p.respuesta_estudiante_letra %}
+                    {{ p.respuesta_estudiante_letra }}. {{ p.respuesta_estudiante_texto }}
+                {% else %}
+                    (Omitida)
+                {% endif %}
+            </td>
+            <td>
+                {{ p.respuesta_correcta_letra }}. {{ p.respuesta_correcta_texto }}
+            </td>
+            <td>
+                {% if p.es_correcta %}
+                    ✅ Correcta
+                {% elif not p.respuesta_estudiante_letra %}
+                    ⚪ Omitida
+                {% else %}
+                    ❌ Incorrecta
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+
+
+    </tbody>
+</table>
+<a href="{% url 'mis_resultados' %}" class="btn btn-secondary">Volver</a>
+{% endblock %}

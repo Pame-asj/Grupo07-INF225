@@ -56,3 +56,32 @@ def resolver_ensayo(request, ensayo_id):
 def ver_resultado(request, resultado_id):
     resultado = get_object_or_404(RespuestaEnsayo, id=resultado_id, estudiante=request.user)
     return render(request, 'ver_resultado.html', {'resultado': resultado})
+
+@login_required
+def mis_resultados_view(request):
+    estudiante = request.user
+    resultados = RespuestaEnsayo.objects.filter(estudiante=estudiante).select_related('ensayo').order_by('-fecha_respuesta')
+    return render(request, 'resultados/mis_resultados.html', {'resultados': resultados})
+
+@login_required
+def detalle_resultado_view(request, resultado_id):
+    resultado = get_object_or_404(RespuestaEnsayo, id=resultado_id, estudiante=request.user)
+    respuestas = RespuestaPregunta.objects.filter(respuesta_ensayo=resultado).select_related('pregunta')
+
+    detalle = []
+    for r in respuestas:
+        opciones = r.pregunta.opciones
+        detalle.append({
+            'pregunta': r.pregunta.enunciado,
+            'respuesta_estudiante_letra': r.alternativa_elegida,
+            'respuesta_estudiante_texto': opciones.get(r.alternativa_elegida, '') if r.alternativa_elegida else None,
+            'respuesta_correcta_letra': r.pregunta.respuesta_correcta,
+            'respuesta_correcta_texto': opciones.get(r.pregunta.respuesta_correcta, ''),
+            'es_correcta': r.es_correcta(),
+        })
+
+    return render(request, 'resultados/detalle_resultado.html', {
+        'resultado': resultado,
+        'detalle': detalle,
+    })
+

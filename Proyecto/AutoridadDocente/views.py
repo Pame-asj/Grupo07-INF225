@@ -16,7 +16,7 @@ def ensayos_view(request):
     ensayos = Ensayo.objects.all()
     return render(request, 'ensayos_docente.html', {'ensayos': ensayos})
 
-def cuenta_view(request):
+def cuentadoc_view(request):
     return render(request, 'cuenta_docente.html')
 
 def listar_ensayos(request):
