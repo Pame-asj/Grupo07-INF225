@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from LoginRegister.models import Ensayo
-from .models import Ensayo, Pregunta
-from .forms import EnsayoForm, PreguntaForm
+from .models import Ensayo, Pregunta, Tema
+from .forms import EnsayoForm, PreguntaForm, TemaForm
 from AutoridadDocente.models import RespuestaEnsayo
 from django.contrib.auth.decorators import login_required
 def index(request):
@@ -23,11 +23,31 @@ def listar_ensayos(request):
     ensayos = Ensayo.objects.all()
     return render(request, 'ensayos/listar.html', {'ensayos': ensayos})
 
+def crear_tema(request):
+    if request.method == 'POST':
+        form = TemaForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('lista_temas')  # Redirige a una vista de listado
+    else:
+        form = TemaForm()
+    return render(request, 'AutoridadDocente/crear_tema.html', {'form': form})
+
+
 def crear_ensayo(request):
     if request.method == 'POST':
         form = EnsayoForm(request.POST)
         if form.is_valid():
-            form.save()
+            ensayo = form.save(commit=False)
+            ensayo.save()
+            
+            # Manejar nuevo tema
+            nuevo_tema_nombre = form.cleaned_data.get('nuevo_tema')
+            if nuevo_tema_nombre:
+                nuevo_tema, created = Tema.objects.get_or_create(nombre=nuevo_tema_nombre)
+                ensayo.temas.add(nuevo_tema)
+            
+            form.save_m2m()  # Para guardar relaciones many-to-many
             return redirect('listar_ensayos')
     else:
         form = EnsayoForm()
@@ -38,7 +58,15 @@ def editar_ensayo(request, ensayo_id):
     if request.method == 'POST':
         form = EnsayoForm(request.POST, instance=ensayo)
         if form.is_valid():
-            form.save()
+            ensayo = form.save(commit=False)
+            ensayo.save()
+            
+            nuevo_tema_nombre = form.cleaned_data.get('nuevo_tema')
+            if nuevo_tema_nombre:
+                nuevo_tema, created = Tema.objects.get_or_create(nombre=nuevo_tema_nombre)
+                ensayo.temas.add(nuevo_tema)
+            
+            form.save_m2m()
             return redirect('listar_ensayos')
     else:
         form = EnsayoForm(instance=ensayo)

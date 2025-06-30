@@ -2,10 +2,21 @@
 from django import forms
 from .models import Ensayo, Pregunta, Tema
 
+
+class TemaForm(forms.ModelForm):
+    class Meta:
+        model = Tema
+        fields = ['nombre']
+
 class EnsayoForm(forms.ModelForm):
+    nuevo_tema = forms.CharField(
+        max_length=100,
+        required=False,
+        label="Agregar nuevo tema (opcional)"
+    )
     class Meta:
         model = Ensayo
-        fields = ['titulo', 'nivel', 'colegio', 'temas', 'preguntas']
+        fields = ['titulo', 'nivel', 'colegio', 'temas', 'preguntas', 'nuevo_tema']
         widgets = {
             'temas': forms.CheckboxSelectMultiple,
             'preguntas': forms.CheckboxSelectMultiple,
