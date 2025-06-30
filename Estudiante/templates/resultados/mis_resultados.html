@@ -1,0 +1,44 @@
+{% extends 'base_estudiante.html' %}
+
+{% block navegacion %}
+<li class="nav-item"><a class="nav-link" href="{% url 'estudiante_index' %}">Inicio</a></li>
+<li class="nav-item"><a class="nav-link" href="{% url 'ensayos' %}">Ensayos</a></li>
+<li class="nav-item"><a class="nav-link"  href="{% url 'mis_resultados' %}">Mis resultados</a></li>
+<li class="nav-item"><a class="nav-link" href="{% url 'aboutus' %}">Sobre nosotros</a></li>
+{% endblock %}
+
+{% block cuenta-atras %}
+    <li class="nav-item"><a class="nav-link" href="{% url 'cuenta_estudiante' %}">Cuenta</a></li>
+    <li class="nav-item"><a href="{% url 'logout' %}" class="nav-link">Cerrar sesión</a></li>
+{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Mis Resultados</h2>
+
+{% if resultados %}
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Ensayo</th>
+            <th>Fecha</th>
+            <th>Puntaje</th>
+            <th>Porcentaje Correcto</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for r in resultados %}
+        <tr>
+            <td>{{ r.ensayo.titulo }}</td>
+            <td>{{ r.fecha_respuesta|date:"d/m/Y H:i" }}</td>
+            <td>{{ r.puntaje|floatformat:1 }}</td>
+            <td>{{ r.porcentaje|floatformat:1 }}%</td>
+            <td><a href="{% url 'detalle_resultado' r.id %}" class="btn btn-sm btn-info">Ver Detalle</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>No has completado ensayos aún.</p>
+{% endif %}
+{% endblock %}

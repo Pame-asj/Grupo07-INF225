@@ -1,19 +1,26 @@
-Este es el repositorio del grupo 7 para el proyecto de INF236.
+Para visualizar el servidor, es necesario tener **Django** instalado. Esto se puede hacer mediante el siguiente comando:
 
-Integrantes - Rol:
-* Cristian Rioseco - 202204507-8
-* Benjamín Retamal - 202173606-9
-* Pablo Acuña - 202273623-2
-* Gustavo Romero - 202130511-4
+```bash
+pip install django
+```
 
-* **Tutor:** Felipe Ignacio Fernández Aguilar
+La instalación puede llevarse a cabo dentro de un **entorno virtual** o directamente en el **sistema**, según se estime.
 
-## Wiki
+Luego, para iniciar el servidor, debe ubicarse en el directorio del proyecto (donde se encuentra el archivo `manage.py`) y si se trabaja en un entorno virtual linux ejecutar primero:
 
-Se puede acceder a la Wiki mediante el siguiente [enlace](https://gitlab.com/gustavorg200306/grupo07-2025-proyinf/-/wikis/home).
+```bash
+virtualenv -p python3 venv
+source venv/bin/activate
+pip install django #En este caso es necesario volver a instalar django
+```
+Y si no, basta con la siguiente linea:
 
-## Videos
+```bash
+python manage.py runserver
+```
 
-Se puede acceder al video con la presentación del cliente mediante el siguiente [enlace](https://aula.usm.cl/mod/resource/view.php?id=6322574)
+Podrá acceder al prototipo a través de navegador web, ingresando a la siguiente dirección:
 
-Se puede acceder al video con la presentación de un prototipo mediante el siguiente [enlace](https://www.youtube.com/watch?v=hKjB6P-AVgo)
+```
+http://127.0.0.1:8000
+```

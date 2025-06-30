@@ -1,0 +1,35 @@
+{% extends 'base_estudiante.html' %}
+
+{% load static %}
+
+{% block navegacion %}
+<li class="nav-item"><a class="nav-link" href="{% url 'estudiante_index' %}">Inicio</a></li>
+<li class="nav-item"><a class="nav-link" href="{% url 'ensayos' %}">Ensayos</a></li>
+<li class="nav-item"><a class="nav-link"  href="{% url 'mis_resultados' %}">Mis resultados</a></li>
+<li class="nav-item"><a class="nav-link" href="{% url 'aboutus' %}">Sobre nosotros</a></li>
+{% endblock %}
+
+{% block cuenta-atras %}
+    <li class="nav-item"><a class="nav-link" href="{% url 'cuenta_estudiante' %}">Cuenta</a></li>
+    <li class="nav-item"><a href="{% url 'logout' %}" class="nav-link">Cerrar sesión</a></li>
+{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-8">
+        <h1 class="mb-5"> ¡Bienvenido!</h1>
+        <p>¡Nos alegra tenerte aquí!</p>
+        <p>Esta plataforma ha sido diseñada para que puedas practicar de manera personalizada, a tu ritmo y según los contenidos que estás viendo en tu curso.</p>
+            
+        <p>Accede a ensayos asignados por tu colegio, pon a prueba tus conocimientos y recibe retroalimentación que te ayudará a prepararte de forma efectiva para la PAES.
+            Cada ensayo está pensado para que ganes confianza, mejores tu rendimiento y llegues más preparado al momento de la prueba real.</p>
+            
+        <p>Explora, responde y aprende.
+            Tu progreso empieza aquí.</p>
+    </div>
+    <div class="col-md-4 d-flex justify-content-center align-items-center">
+        <img src="https://admision.uautonoma.cl/content/uploads/2023/07/universidad-autonoma-blog-que-se-puede-llevar-paes-800x366.jpeg" alt="FotoHome" width="300" height="210">
+    </div>
+</div>
+{% endblock %}
