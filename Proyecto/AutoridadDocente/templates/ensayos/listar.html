@@ -1,0 +1,51 @@
+{% extends 'base_docente.html' %}
+
+{% block navegacion %}
+<li class="nav-item"><a class="nav-link" href="{% url 'docente_index' %}">Inicio</a></li>
+<li class="nav-item"><a class="nav-link" href="{% url 'listar_ensayos' %}">Gestionar Ensayos</a></li>
+<li class="nav-item"><a class="nav-link" href="{% url 'resultados_docente' %}">Resultados</a></li>
+<li class="nav-item"><a class="nav-link" href="{% url 'listar_preguntas' %}">Banco de Preguntas</a></li>
+{% endblock %}
+
+{% block cuenta-atras %}
+<li class="nav-item"><a class="nav-link" href="{% url 'cuenta_docente' %}">Cuenta</a></li>
+<li class="nav-item"><a href="{% url 'logout' %}" class="nav-link">Cerrar sesión</a></li>
+{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Gestión de Ensayos</h2>
+<a href="{% url 'crear_ensayo' %}" class="btn btn-primary mb-3">Crear nuevo ensayo</a>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Título</th>
+            <th>Nivel</th>
+            <th>Colegio</th>
+            <th>Temas</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for ensayo in ensayos %}
+        <tr>
+            <td>{{ ensayo.titulo }}</td>
+            <td>{{ ensayo.nivel }}</td>
+            <td>{{ ensayo.colegio }}</td>
+            <td>
+                {% for tema in ensayo.temas.all %}
+                    <span class="badge bg-secondary">{{ tema.nombre }}</span>
+                {% endfor %}
+            </td>
+            <td>
+                <a href="{% url 'editar_ensayo' ensayo.id %}" class="btn btn-sm btn-warning">Editar</a>
+                <a href="{% url 'eliminar_ensayo' ensayo.id %}" class="btn btn-sm btn-danger">Eliminar</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5">No hay ensayos registrados.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+
