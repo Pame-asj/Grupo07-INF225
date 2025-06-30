@@ -1,0 +1,32 @@
+{% extends 'base_estudiante.html' %}
+
+{% block navegacion %}
+<li class="nav-item"><a class="nav-link" href="{% url 'estudiante_index' %}">Inicio</a></li>
+<li class="nav-item"><a class="nav-link" href="{% url 'ensayos' %}">Ensayos</a></li>
+<li class="nav-item"><a class="nav-link"  href="{% url 'mis_resultados' %}">Mis resultados</a></li>
+<li class="nav-item"><a class="nav-link" href="{% url 'aboutus' %}">Sobre nosotros</a></li>
+{% endblock %}
+
+{% block cuenta-atras %}
+    <li class="nav-item"><a class="nav-link" href="{% url 'cuenta_estudiante' %}">Cuenta</a></li>
+    <li class="nav-item"><a href="{% url 'logout' %}" class="nav-link">Cerrar sesión</a></li>
+{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">{{ ensayo.titulo }}</h2>
+<form method="post">
+  {% csrf_token %}
+  {% for pregunta in ensayo.preguntas.all %}
+    <div class="mb-4">
+      <p><strong>{{ forloop.counter }}. {{ pregunta.enunciado }}</strong></p>
+      {% for clave, valor in pregunta.opciones.items %}
+        <label>
+          <input type="radio" name="pregunta_{{ pregunta.id }}" value="{{ clave }}" required>
+          {{ clave }}. {{ valor }}
+        </label><br>
+      {% endfor %}
+    </div>
+  {% endfor %}
+  <button type="submit" class="btn btn-success">Enviar respuestas</button>
+</form>
+{% endblock %}
