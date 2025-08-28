@@ -10,7 +10,7 @@ Integrantes - Rol:
 
 ## Wiki
 
-Se puede acceder a la Wiki mediante el siguiente [enlace](https://gitlab.com/gustavorg200306/grupo07-2025-proyinf/-/wikis/home).
+Se puede acceder a la Wiki mediante el siguiente [enlace](https://github.com/Pame-asj/Grupo07-INF225/wiki).
 
 ## Videos INF236
 
