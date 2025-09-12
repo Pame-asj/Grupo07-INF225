@@ -2,6 +2,16 @@
 from LoginRegister.models import User
 from django.db import models
 
+class Tag(models.Model):
+    name = models.CharField(max_length=64, unique=True)
+    slug = models.SlugField(max_length=80, unique=True)
+
+    class Meta:
+        ordering = ["name"]
+
+    def __str__(self):
+        return self.name
+
 class Tema(models.Model):
     nombre = models.CharField(max_length=100)
 
@@ -16,6 +26,26 @@ class Pregunta(models.Model):
 
     def __str__(self):
         return self.enunciado
+    
+    is_free = models.BooleanField(default=False)  # NUEVO
+    tags = models.ManyToManyField(Tag, blank=True, related_name="preguntas")  # NUEVO
+
+    # helpers de consulta
+    @staticmethod
+    def libres():
+        return Pregunta.objects.filter(is_free=True)
+
+    @staticmethod
+    def libres_por_tags(tag_ids, match_any=True):
+        qs = Pregunta.libres()
+        if tag_ids:
+            if match_any:
+                qs = qs.filter(tags__in=tag_ids).distinct()
+            else:
+                # match ALL tags
+                for t in tag_ids:
+                    qs = qs.filter(tags=t)
+        return qs
 
 class Ensayo(models.Model):
     titulo = models.CharField(max_length=200)

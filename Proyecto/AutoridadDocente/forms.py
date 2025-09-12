@@ -1,12 +1,19 @@
-
 from django import forms
-from .models import Ensayo, Pregunta, Tema
+from .models import Ensayo, Pregunta, Tema, Tag
+from django.utils.text import slugify
 
 
 class TemaForm(forms.ModelForm):
     class Meta:
         model = Tema
-        fields = ['nombre']
+        fields = "__all__"
+
+
+class TagForm(forms.ModelForm):
+    class Meta:
+        model = Tag
+        fields = ["name"]
+
 
 class EnsayoForm(forms.ModelForm):
     nuevo_tema = forms.CharField(
@@ -21,6 +28,7 @@ class EnsayoForm(forms.ModelForm):
             'temas': forms.CheckboxSelectMultiple,
             'preguntas': forms.CheckboxSelectMultiple,
         }
+
 
 class PreguntaForm(forms.ModelForm):
     OPCIONES_CHOICES = [
@@ -38,17 +46,22 @@ class PreguntaForm(forms.ModelForm):
 
     class Meta:
         model = Pregunta
-        fields = ['enunciado', 'respuesta_correcta', 'temas']
+        # 👉 Incluye los nuevos campos:
+        fields = ['enunciado', 'respuesta_correcta', 'temas', 'is_free', 'tags']
         widgets = {
             'temas': forms.CheckboxSelectMultiple,
+            'tags': forms.CheckboxSelectMultiple,
         }
         labels = {
             'enunciado': 'Enunciado de la pregunta',
-            'temas': 'Temas relacionados',
+            'temas': 'Etiquetas (Temas)',
+            'is_free': 'Pregunta libre',
+            'tags': 'Etiquetas',
         }
 
     def save(self, commit=True):
         pregunta = super().save(commit=False)
+        # Persistimos las alternativas en el JSONField del modelo
         pregunta.opciones = {
             'A': self.cleaned_data['opcion_A'],
             'B': self.cleaned_data['opcion_B'],
@@ -58,13 +71,42 @@ class PreguntaForm(forms.ModelForm):
         if commit:
             pregunta.save()
             self.save_m2m()
+
+            # Si es libre y NO seleccionaron tags, generamos tags desde los Temas elegidos
+            if self.cleaned_data.get("is_free"):
+                tags = self.cleaned_data.get("tags")
+                temas = self.cleaned_data.get("temas")
+                if (not tags or tags.count() == 0) and temas and temas.count() > 0:
+                    for tema in temas:
+                        tag, _ = Tag.objects.get_or_create(
+                            slug=slugify(tema.nombre),
+                            defaults={"name": tema.nombre}
+                        )
+                        pregunta.tags.add(tag)
         return pregunta
+
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        # Pre-cargar las opciones si ya existen (editar)
         if self.instance and self.instance.opciones:
             self.fields['opcion_A'].initial = self.instance.opciones.get('A', '')
             self.fields['opcion_B'].initial = self.instance.opciones.get('B', '')
             self.fields['opcion_C'].initial = self.instance.opciones.get('C', '')
             self.fields['opcion_D'].initial = self.instance.opciones.get('D', '')
 
+    def clean(self):
+        cleaned = super().clean()
+        is_free = cleaned.get("is_free")
+        tags = cleaned.get("tags")
+        temas = cleaned.get("temas")
+
+        # Si es libre, aceptamos "Etiquetas específicas (tags)" O "Temas" como respaldo.
+        if is_free:
+            no_tags = (not tags or tags.count() == 0)
+            no_temas = (not temas or temas.count() == 0)
+            if no_tags and no_temas:
+                raise forms.ValidationError(
+                    "Las preguntas libres requieren al menos una etiqueta o tema."
+                )
+        return cleaned

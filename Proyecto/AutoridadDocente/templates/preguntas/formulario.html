@@ -16,32 +16,55 @@
 <h2 class="mb-4">{{ form.instance.pk|yesno:"Editar pregunta,Nueva pregunta" }}</h2>
 
 <form method="post">
-    {% csrf_token %}
-    <div class="mb-3">
-        {{ form.enunciado.label_tag }} {{ form.enunciado }}
-    </div>
+  {% csrf_token %}
 
-    <div class="mb-3">
-        {{ form.opcion_A.label_tag }} {{ form.opcion_A }}
+  {# 👇 Muestra errores generales del formulario #}
+  {% if form.non_field_errors %}
+    <div class="alert alert-danger">
+      {{ form.non_field_errors }}
     </div>
-    <div class="mb-3">
-        {{ form.opcion_B.label_tag }} {{ form.opcion_B }}
-    </div>
-    <div class="mb-3">
-        {{ form.opcion_C.label_tag }} {{ form.opcion_C }}
-    </div>
-    <div class="mb-3">
-        {{ form.opcion_D.label_tag }} {{ form.opcion_D }}
-    </div>
+  {% endif %}
 
-    <div class="mb-3">
-        {{ form.respuesta_correcta.label_tag }} {{ form.respuesta_correcta }}
-    </div>
+  <div class="mb-3">
+    {{ form.enunciado.label_tag }} {{ form.enunciado }} {{ form.enunciado.errors }}
+  </div>
 
-    <div class="mb-3">
-        {{ form.temas.label_tag }} {{ form.temas }}
-    </div>
-    <button type="submit" class="btn btn-success">Guardar</button>
-    <a href="{% url 'listar_preguntas' %}" class="btn btn-secondary">Cancelar</a>
+  <div class="mb-3">
+    {{ form.opcion_A.label_tag }} {{ form.opcion_A }} {{ form.opcion_A.errors }}
+  </div>
+  <div class="mb-3">
+    {{ form.opcion_B.label_tag }} {{ form.opcion_B }} {{ form.opcion_B.errors }}
+  </div>
+  <div class="mb-3">
+    {{ form.opcion_C.label_tag }} {{ form.opcion_C }} {{ form.opcion_C.errors }}
+  </div>
+  <div class="mb-3">
+    {{ form.opcion_D.label_tag }} {{ form.opcion_D }} {{ form.opcion_D.errors }}
+  </div>
+
+  <div class="mb-3">
+    {{ form.respuesta_correcta.label_tag }} {{ form.respuesta_correcta }} {{ form.respuesta_correcta.errors }}
+  </div>
+
+  <div class="mb-3">
+    {{ form.temas.label_tag }} {{ form.temas }} {{ form.temas.errors }}
+  </div>
+
+  {# NUEVO: ya existen porque los agregamos al form #}
+  <div class="form-check mb-3">
+    {{ form.is_free }} {{ form.is_free.label_tag }}
+    {{ form.is_free.errors }}
+    <div class="text-muted"><small>Si marcas “libre”, la pregunta queda disponible para práctica individual.</small></div>
+  </div>
+
+  <div class="mb-3">
+    {{ form.tags.label_tag }} {{ form.tags }} {{ form.tags.errors }}
+    <div class="text-muted"><small>Requerido si marcas “libre”: al menos una etiqueta.</small></div>
+  </div>
+
+  <button type="submit" class="btn btn-success">Guardar</button>
+  <a href="{% url 'listar_preguntas' %}" class="btn btn-secondary">Cancelar</a>
 </form>
 {% endblock %}
+
+

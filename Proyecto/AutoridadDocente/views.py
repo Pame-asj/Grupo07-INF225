@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from LoginRegister.models import Ensayo
-from .models import Ensayo, Pregunta, Tema
-from .forms import EnsayoForm, PreguntaForm, TemaForm
+from .models import Ensayo, Pregunta, Tema, Tag
+from .forms import EnsayoForm, PreguntaForm, TemaForm, TagForm
 from AutoridadDocente.models import RespuestaEnsayo
 from django.contrib.auth.decorators import login_required
 def index(request):
@@ -28,11 +28,20 @@ def crear_tema(request):
         form = TemaForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('lista_temas')  # Redirige a una vista de listado
+            return redirect('listar_preguntas')  # redirige a un nombre de URL que sí existe
     else:
         form = TemaForm()
-    return render(request, 'AutoridadDocente/crear_tema.html', {'form': form})
+    return render(request, 'crear_tema.html', {'form': form})
 
+def crear_tag(request):
+    if request.method == 'POST':
+        form = TagForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('listar_preguntas')
+    else:
+        form = TagForm()
+    return render(request, 'crear_tag.html', {'form': form})
 
 def crear_ensayo(request):
     if request.method == 'POST':
@@ -78,8 +87,16 @@ def eliminar_ensayo(request, ensayo_id):
     return redirect('listar_ensayos')
 
 def listar_preguntas(request):
-    preguntas = Pregunta.objects.all()
-    return render(request, 'preguntas/listar.html', {'preguntas': preguntas})
+    solo_libres = request.GET.get('libres') == '1'
+    preguntas = Pregunta.objects.all().prefetch_related('temas')
+    if solo_libres and hasattr(Pregunta, 'is_free'):
+        preguntas = preguntas.filter(is_free=True)
+
+    context = {
+        'preguntas': preguntas,
+        'solo_libres': solo_libres,
+    }
+    return render(request, 'preguntas/listar.html', context)
 
 def crear_pregunta(request):
     if request.method == 'POST':

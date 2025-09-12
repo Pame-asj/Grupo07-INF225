@@ -17,4 +17,5 @@ urlpatterns = [
     path('preguntas/eliminar/<int:pregunta_id>/', views.eliminar_pregunta, name='eliminar_pregunta'),
     path('resultados/', views.resultados_ensayos_docente, name='resultados_docente'),
     path('temas/crear/', views.crear_tema, name='crear_tema'),
+    path('tags/crear/', views.crear_tag, name='crear_tag'),
 ]
