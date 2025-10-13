@@ -2,8 +2,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from LoginRegister.models import Ensayo
 from .models import Ensayo, Pregunta, Tema, Tag
 from .forms import EnsayoForm, PreguntaForm, TemaForm, TagForm
-from AutoridadDocente.models import RespuestaEnsayo
+from AutoridadDocente.models import RespuestaEnsayo, RespuestaPregunta
 from django.contrib.auth.decorators import login_required
+from django.db.models import Count, Q, F
+
 def index(request):
     return render(request, 'base_docente.html')
 
@@ -131,3 +133,64 @@ def resultados_ensayos_docente(request):
 
     resultados = RespuestaEnsayo.objects.select_related('estudiante', 'ensayo').order_by('-fecha_respuesta')
     return render(request, 'resultados/resultados_docente.html', {'resultados': resultados})
+
+
+@login_required
+def graficos_docente(request):
+    # Solo docentes
+    if getattr(request.user, "role", None) != 'AutoridadDocente':
+        return redirect('login')
+
+    # Filtro por etiquetas (GET: tags=1&tags=2...)
+    tag_ids = request.GET.getlist('tags', [])
+    tags = Tag.objects.all().order_by('name')
+
+    data_labels = []
+    data_correctas = []
+    data_incorrectas = []
+    total_global = 0
+
+    agg_rows = []
+    if tag_ids:
+        qs = (
+            RespuestaPregunta.objects
+            .filter(pregunta__tags__in=tag_ids)
+            .values('pregunta__tags__id', 'pregunta__tags__name')
+            .annotate(
+                total=Count('id'),
+                correctas=Count('id', filter=Q(alternativa_elegida=F('pregunta__respuesta_correcta')))
+            )
+            .order_by('pregunta__tags__name')
+        )
+
+        for row in qs:
+            nombre = row['pregunta__tags__name']
+            total = row['total'] or 0
+            correctas = row['correctas'] or 0
+            incorrectas = max(total - correctas, 0)
+
+            data_labels.append(nombre)
+            data_correctas.append(correctas)
+            data_incorrectas.append(incorrectas)
+            total_global += total
+
+            # 👉 precomputado para el template (evita usar add en Jinja/Django)
+            agg_rows.append({
+                'name': nombre,
+                'correctas': correctas,
+                'incorrectas': incorrectas,
+                'total': total,
+            })
+
+    context = {
+        'tags': tags,
+        'selected_tag_ids': list(map(int, tag_ids)) if tag_ids else [],
+        'data_labels': data_labels,
+        'data_correctas': data_correctas,
+        'data_incorrectas': data_incorrectas,
+        'total_global': total_global,
+        'agg': agg_rows,
+    }
+    return render(request, 'graficos.html', context)
+
+

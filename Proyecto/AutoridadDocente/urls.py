@@ -11,11 +11,17 @@ urlpatterns = [
     path('ensayos/crear/', views.crear_ensayo, name='crear_ensayo'),
     path('ensayos/editar/<int:ensayo_id>/', views.editar_ensayo, name='editar_ensayo'),
     path('ensayos/eliminar/<int:ensayo_id>/', views.eliminar_ensayo, name='eliminar_ensayo'),
+
     path('preguntas/', views.listar_preguntas, name='listar_preguntas'),
     path('preguntas/crear/', views.crear_pregunta, name='crear_pregunta'),
     path('preguntas/editar/<int:pregunta_id>/', views.editar_pregunta, name='editar_pregunta'),
     path('preguntas/eliminar/<int:pregunta_id>/', views.eliminar_pregunta, name='eliminar_pregunta'),
+
     path('resultados/', views.resultados_ensayos_docente, name='resultados_docente'),
+
     path('temas/crear/', views.crear_tema, name='crear_tema'),
     path('tags/crear/', views.crear_tag, name='crear_tag'),
+
+    # NUEVO: gráficos por etiquetas (docente)
+    path('graficos/', views.graficos_docente, name='graficos_docente'),
 ]
