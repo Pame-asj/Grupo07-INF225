@@ -24,3 +24,8 @@ Podrá acceder al prototipo a través de navegador web, ingresando a la siguient
 ```
 http://127.0.0.1:8000
 ```
+
+Pruebas Test Endpoints:
+```bash
+python manage.py test AutoridadDocente.tests.test_endpoints -v 2
+```
