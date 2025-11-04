@@ -5,6 +5,8 @@ from .forms import EnsayoForm, PreguntaForm, TemaForm, TagForm
 from AutoridadDocente.models import RespuestaEnsayo, RespuestaPregunta
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Q, F
+from django.db import IntegrityError
+
 
 def index(request):
     return render(request, 'base_docente.html')
@@ -39,11 +41,16 @@ def crear_tag(request):
     if request.method == 'POST':
         form = TagForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('listar_preguntas')
+            try:
+                form.save()
+                return redirect('listar_preguntas')
+            except IntegrityError:
+                # Defensa extra ante carreras o casos raros
+                form.add_error('name', 'Ya existe una etiqueta con un slug derivado de ese nombre. Intenta con otro nombre.')
     else:
         form = TagForm()
     return render(request, 'crear_tag.html', {'form': form})
+
 
 def crear_ensayo(request):
     if request.method == 'POST':
@@ -141,20 +148,56 @@ def graficos_docente(request):
     if getattr(request.user, "role", None) != 'AutoridadDocente':
         return redirect('login')
 
-    # Filtro por etiquetas (GET: tags=1&tags=2...)
-    tag_ids = request.GET.getlist('tags', [])
+    # === Saneo de parámetros ===
+    raw_tag_ids = request.GET.getlist('tags', [])
+    parsed_ids, invalid_vals = [], []
+    for v in raw_tag_ids:
+        try:
+            parsed_ids.append(int(v))
+        except (TypeError, ValueError):
+            invalid_vals.append(v)
+
+    # Eliminar duplicados preservando orden
+    seen = set()
+    dedup_ids = []
+    for i in parsed_ids:
+        if i not in seen:
+            dedup_ids.append(i)
+            seen.add(i)
+
+    # Límite máximo de etiquetas aplicadas
+    MAX_TAGS = 5
+    truncated = len(dedup_ids) > MAX_TAGS
+    limited_ids = dedup_ids[:MAX_TAGS]
+
+    # Verificar cuáles existen realmente en BD
+    existing_ids = list(
+        Tag.objects.filter(id__in=limited_ids).values_list('id', flat=True)
+    )
+    missing_ids = [i for i in limited_ids if i not in existing_ids]
+
+    # Preparar avisos de filtro
+    filter_warnings = []
+    if invalid_vals:
+        filter_warnings.append(f"Se ignoraron {len(invalid_vals)} ID(s) de etiqueta inválidos.")
+    if missing_ids:
+        filter_warnings.append(f"Se ignoraron {len(missing_ids)} etiqueta(s) inexistentes.")
+    if truncated:
+        filter_warnings.append(f"Se aplicó un máximo de {MAX_TAGS} etiquetas; el resto fue ignorado.")
+
+    # Cargar catálogo completo para checkboxes
     tags = Tag.objects.all().order_by('name')
 
     data_labels = []
     data_correctas = []
     data_incorrectas = []
     total_global = 0
-
     agg_rows = []
-    if tag_ids:
+
+    if existing_ids:
         qs = (
             RespuestaPregunta.objects
-            .filter(pregunta__tags__in=tag_ids)
+            .filter(pregunta__tags__in=existing_ids)
             .values('pregunta__tags__id', 'pregunta__tags__name')
             .annotate(
                 total=Count('id'),
@@ -174,7 +217,6 @@ def graficos_docente(request):
             data_incorrectas.append(incorrectas)
             total_global += total
 
-            # 👉 precomputado para el template (evita usar add en Jinja/Django)
             agg_rows.append({
                 'name': nombre,
                 'correctas': correctas,
@@ -184,13 +226,14 @@ def graficos_docente(request):
 
     context = {
         'tags': tags,
-        'selected_tag_ids': list(map(int, tag_ids)) if tag_ids else [],
+        # Solo marcar como seleccionadas las etiquetas existentes y saneadas
+        'selected_tag_ids': existing_ids,
         'data_labels': data_labels,
         'data_correctas': data_correctas,
         'data_incorrectas': data_incorrectas,
         'total_global': total_global,
         'agg': agg_rows,
+        'filter_warnings': filter_warnings,
+        'max_tags': MAX_TAGS,
     }
     return render(request, 'graficos.html', context)
-
-

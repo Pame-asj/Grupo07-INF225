@@ -12,7 +12,34 @@ class TemaForm(forms.ModelForm):
 class TagForm(forms.ModelForm):
     class Meta:
         model = Tag
-        fields = ["name"]
+        fields = ["name"]  # el slug se autogenera, no se expone
+
+    def clean_name(self):
+        name = (self.cleaned_data.get("name") or "").strip()
+        if not name:
+            raise forms.ValidationError("El nombre no puede estar vacío.")
+        return name
+
+    def _build_unique_slug(self, base_text: str) -> str:
+        """
+        Genera un slug único a partir de base_text. Si existe, agrega sufijos -2, -3, ...
+        """
+        base_slug = slugify(base_text) or "tag"
+        slug = base_slug
+        i = 2
+        from .models import Tag  # import local para evitar ciclos
+        while Tag.objects.filter(slug=slug).exists():
+            slug = f"{base_slug}-{i}"
+            i += 1
+        return slug
+
+    def save(self, commit=True):
+        tag = super().save(commit=False)
+        # Siempre autogenerar/normalizar slug a partir del name
+        tag.slug = self._build_unique_slug(tag.name)
+        if commit:
+            tag.save()
+        return tag
 
 
 class EnsayoForm(forms.ModelForm):
