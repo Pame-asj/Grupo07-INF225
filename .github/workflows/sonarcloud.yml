@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # necesario para un análisis preciso
+          fetch-depth: 0 
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -27,7 +27,7 @@ jobs:
           pip install -r requirements.txt || true
 
       - name: SonarCloud Scan
-        uses: SonarSource/sonarqube-scan-action@v6
+        uses: SonarSource/sonarqube-scan-action@0d58f036feab59c0e5fa30e02857f94b8b6ce398
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
