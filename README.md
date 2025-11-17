@@ -8,6 +8,8 @@ Integrantes - Rol:
 
 * **Tutor:** Eduardo Mauricio Pino Huentelaf
 
+probando
+
 ## Wiki
 
 Se puede acceder a la Wiki mediante el siguiente [enlace](https://github.com/Pame-asj/Grupo07-INF225/wiki).
