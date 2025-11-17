@@ -27,7 +27,7 @@ jobs:
           pip install -r requirements.txt || true
 
       - name: SonarCloud Scan
-        uses: SonarSource/sonarqube-scan-action@0d58f036feab59c0e5fa30e02857f94b8b6ce398
+        uses: SonarSource/sonarqube-scan-action@v6
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
