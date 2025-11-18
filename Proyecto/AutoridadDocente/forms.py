@@ -6,7 +6,7 @@ from django.utils.text import slugify
 class TemaForm(forms.ModelForm):
     class Meta:
         model = Tema
-        fields = "__all__"
+        fields = ["nombre"]
 
 
 class TagForm(forms.ModelForm):
